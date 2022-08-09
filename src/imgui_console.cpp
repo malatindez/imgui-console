@@ -162,29 +162,29 @@ void ImGuiConsole::DefaultSettings()
 
 void ImGuiConsole::RegisterConsoleCommands()
 {
-    m_ConsoleSystem.RegisterCommand("clear", "Clear console log", [this]()
-    {
-        m_ConsoleSystem.Items().clear();
-    });
+    m_ConsoleSystem.RegisterCommand("clear", "Clear console log", [this] ()
+                                    {
+                                        m_ConsoleSystem.Items().clear();
+                                    });
 
-    m_ConsoleSystem.RegisterCommand("filter", "Set screen filter", [this](const csys::String &filter)
-    {
-        // Reset filter buffer.
-        std::memset(m_TextFilter.InputBuf, '\0', 256);
+    m_ConsoleSystem.RegisterCommand("filter", "Set screen filter", [this] (const csys::String &filter)
+                                    {
+                                        // Reset filter buffer.
+                                        std::memset(m_TextFilter.InputBuf, '\0', 256);
 
-        // Copy filter input buffer from client.
-        std::copy(filter.m_String.c_str(), filter.m_String.c_str() + std::min(static_cast<int>(filter.m_String.length()), 255), m_TextFilter.InputBuf);
+                                        // Copy filter input buffer from client.
+                                        std::copy(filter.m_String.c_str(), filter.m_String.c_str() + std::min(static_cast<int>(filter.m_String.length()), 255), m_TextFilter.InputBuf);
 
-        // Build text filter.
-        m_TextFilter.Build();
+                                        // Build text filter.
+                                        m_TextFilter.Build();
 
-    }, csys::Arg<csys::String>("filter_str"));
+                                    }, csys::Arg<csys::String>("filter_str"));
 
-    m_ConsoleSystem.RegisterCommand("run", "Run given script", [this](const csys::String &filter)
-    {
-        // Logs command.
-        m_ConsoleSystem.RunScript(filter.m_String);
-    }, csys::Arg<csys::String>("script_name"));
+    m_ConsoleSystem.RegisterCommand("run", "Run given script", [this] (const csys::String &filter)
+                                    {
+                                        // Logs command.
+                                        m_ConsoleSystem.RunScript(filter.m_String);
+                                    }, csys::Arg<csys::String>("script_name"));
 }
 
 void ImGuiConsole::FilterBar()
@@ -267,8 +267,8 @@ void ImGuiConsole::InputBar()
 {
     // Variables.
     ImGuiInputTextFlags inputTextFlags =
-            ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_CallbackCompletion |
-            ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackAlways;
+        ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_CallbackCompletion |
+        ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackAlways;
 
     // Only reclaim after enter key is pressed!
     bool reclaimFocus = false;
@@ -366,7 +366,7 @@ void ImGuiConsole::MenuBar()
         {
             // Logging Colors
             ImGuiColorEditFlags flags =
-                    ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar;
+                ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar;
 
             ImGui::TextUnformatted("Color Palette");
             ImGui::Indent();
@@ -512,7 +512,7 @@ int ImGuiConsole::InputCallback(ImGuiInputTextCallbackData *data)
             // We have performed the completion event.
             console->m_WasPrevFrameTabCompletion = true;
         }
-            break;
+        break;
 
         case ImGuiInputTextFlags_CallbackHistory:
         {
@@ -539,7 +539,7 @@ int ImGuiConsole::InputCallback(ImGuiInputTextCallbackData *data)
             // Insert commands.
             data->InsertChars(data->CursorPos, prevCommand.data());
         }
-            break;
+        break;
 
         case ImGuiInputTextFlags_CallbackCharFilter:
         case ImGuiInputTextFlags_CallbackAlways:
@@ -549,15 +549,13 @@ int ImGuiConsole::InputCallback(ImGuiInputTextCallbackData *data)
     return 0;
 }
 
-void ImGuiConsole::SettingsHandler_ClearALl(ImGuiContext *ctx, ImGuiSettingsHandler *handler)
-{
-}
+void ImGuiConsole::SettingsHandler_ClearALl([[maybe_unused]] ImGuiContext *ctx, [[maybe_unused]] ImGuiSettingsHandler *handler)
+{}
 
-void ImGuiConsole::SettingsHandler_ReadInit(ImGuiContext *ctx, ImGuiSettingsHandler *handler)
-{
-}
+void ImGuiConsole::SettingsHandler_ReadInit([[maybe_unused]] ImGuiContext *ctx, [[maybe_unused]] ImGuiSettingsHandler *handler)
+{}
 
-void *ImGuiConsole::SettingsHandler_ReadOpen(ImGuiContext *ctx, ImGuiSettingsHandler *handler, const char *name)
+void *ImGuiConsole::SettingsHandler_ReadOpen([[maybe_unused]] ImGuiContext *ctx, [[maybe_unused]] ImGuiSettingsHandler *handler, const char *name)
 {
     if (!handler->UserData)
         return nullptr;
@@ -569,7 +567,7 @@ void *ImGuiConsole::SettingsHandler_ReadOpen(ImGuiContext *ctx, ImGuiSettingsHan
     return (void *) 1;
 }
 
-void ImGuiConsole::SettingsHandler_ReadLine(ImGuiContext *ctx, ImGuiSettingsHandler *handler, void *entry, const char *line)
+void ImGuiConsole::SettingsHandler_ReadLine(ImGuiContext *ctx, ImGuiSettingsHandler *handler, [[maybe_unused]] void *entry, const char *line)
 {
     if (!handler->UserData)
         return;
@@ -580,7 +578,7 @@ void ImGuiConsole::SettingsHandler_ReadLine(ImGuiContext *ctx, ImGuiSettingsHand
     // Ensure console doesn't reset variables.
     console->m_LoadedFromIni = true;
 
-// Disable warning regarding sscanf when using MVSC
+    // Disable warning regarding sscanf when using MVSC
 #pragma warning( push )
 #pragma warning( disable:4996 )
 
@@ -610,7 +608,7 @@ void ImGuiConsole::SettingsHandler_ReadLine(ImGuiContext *ctx, ImGuiSettingsHand
 #pragma warning( pop )
 }
 
-void ImGuiConsole::SettingsHandler_ApplyAll(ImGuiContext *ctx, ImGuiSettingsHandler *handler)
+void ImGuiConsole::SettingsHandler_ApplyAll([[maybe_unused]] ImGuiContext *ctx, [[maybe_unused]] ImGuiSettingsHandler *handler)
 {
     if (!handler->UserData)
         return;
